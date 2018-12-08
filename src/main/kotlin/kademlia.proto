@@ -5,37 +5,46 @@ package kademlia;
 option java_package = "com.kademlia";
 
 enum MessageType {
-    PingRequest = 0;
-    PingResponse = 1;
-    QueryRequest = 2;
-    QueryResponse = 3;
-    InsertResponse = 4;
-    InsertRequest = 5;
+    PingQ = 0;
+    PingR = 1;
+    FindNodeQ = 2;
+    FindNodeR = 3;
+    InsertQ = 4;
+    InsertR = 5;
+}
+message Error {
+    uint32 NotFound = 1;
+    string message = 2;
 }
 
 message Message {
-    /* 160 */
-    string id = 1; // 160 node id
+    string nodeID = 1; // 160 node id
     MessageType messageType = 2;
-    PingRequest pingRequest = 3;
-    PingResponse pingResponse = 4;
-    QueryRequest queryRequest = 5;
-    QueryResponse queryResponse = 6;
-    InsertRequest insertRequest = 7;
-    InsertResponse insertResponse = 8;
+    Ping ping = 3;
+    FindNodeRequest findQ = 4;
+    FindNodeResponse findR = 5;
+    Insert insert = 6;
+    Error error = 7;
+}
+message Ping {
+}
+message Node {
+    string id = 1;
+    string ip = 2;
+    uint32 port = 3;
 }
 
-message PingRequest {
+message FindNodeRequest {
 }
-message PingResponse {
+
+message FindNodeRequest {
+    repeated Node nodes = 1;
 }
-message QueryRequest {
+
+message FindNodeResponse {
+
 }
-message QueryResponse {
-}
-message InsertRequest {
-}
-message InsertResponse {
+message Insert {
 }
 
 service CommunicationService {

@@ -3,7 +3,6 @@ package com.kademlia.node
 import java.math.BigInteger
 import java.util.*
 import kotlin.experimental.xor
-import kotlin.random.Random
 
 data class NodeId(var key: ByteArray) {
     constructor(key: String) : this(key.toByteArray())
@@ -11,7 +10,7 @@ data class NodeId(var key: ByteArray) {
     init {
         if (key.isEmpty()) {
             key = ByteArray(ID_LENGTH)
-            Random.nextBytes(key)
+            Random().nextBytes(key)
         }
 
         if (key.size == ID_LENGTH) {

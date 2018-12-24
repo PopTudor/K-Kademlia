@@ -57,6 +57,9 @@ dependencies {
     implementation("io.grpc:grpc-protobuf:1.17.0")
     implementation("io.grpc:grpc-stub:1.17.0")
     compile group: 'commons-codec', name: 'commons-codec', version: '1.11'
+    // https://mvnrepository.com/artifact/com.google.guava/guava
+    compile group: 'com.google.guava', name: 'guava', version: '27.0.1-jre'
+
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0"

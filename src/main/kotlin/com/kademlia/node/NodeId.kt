@@ -1,22 +1,41 @@
 package com.kademlia.node
 
+import com.google.common.hash.HashCode
+import com.google.common.hash.Hashing
 import java.math.BigInteger
 import java.util.*
 import kotlin.experimental.xor
 
-data class NodeId(var key: ByteArray)  {
+
+data class NodeId(var key: ByteArray) {
     @Throws(IllegalArgumentException::class)
     constructor(key: String) : this(key.toByteArray())
 
     init {
-        if (key.isEmpty()) {
-            key = ByteArray(KEY_SIZE_BYTES)
-            Random().nextBytes(key)
+        when {
+            key.isEmpty()              -> {
+                key = ByteArray(KEY_SIZE_BYTES)
+                Random().nextBytes(key)
+            }
+            key.size != KEY_SIZE_BYTES -> {
+                val hash = getHash(key)
+                key = hash.asBytes()
+            }
+            else                       -> {
+
+            }
         }
 
-        if (key.size != KEY_SIZE_BYTES) {
+        if (key.size != KEY_SIZE_BYTES) { // should never reach
             throw IllegalArgumentException("Key must have $KEY_SIZE_BYTES bytes or ${KEY_SIZE_BYTES * 8} bits")
         }
+    }
+
+    private fun getHash(key: ByteArray): HashCode {
+        val hf = Hashing.sha256()
+        return hf.newHasher()
+                .putBytes(key)
+                .hash()
     }
 
     fun toInt() = BigInteger(1, key)
@@ -47,7 +66,7 @@ data class NodeId(var key: ByteArray)  {
     override fun hashCode() = Arrays.hashCode(key)
 
     companion object {
-        const val KEY_SIZE_BYTES = 20
+        const val KEY_SIZE_BYTES = 32
         const val KEY_SIZE_BITS = KEY_SIZE_BYTES * 8
     }
 }

@@ -13,16 +13,16 @@ data class NodeId(var key: ByteArray) {
 
     init {
         when {
-            key.isEmpty()              -> {
+            key.isEmpty() -> {
                 key = ByteArray(KEY_SIZE_BYTES)
                 Random().nextBytes(key)
+                key = getHash(key).asBytes()
             }
             key.size != KEY_SIZE_BYTES -> {
                 val hash = getHash(key)
                 key = hash.asBytes()
             }
-            else                       -> {
-
+            else -> {
             }
         }
 
@@ -38,17 +38,20 @@ data class NodeId(var key: ByteArray) {
                 .hash()
     }
 
-    fun toInt() = BigInteger(1, key)
+    fun toInt() = BigInteger(key)
+
+    fun toHex() = key.toHexString()
+
     /**
      * Checks the distance between this and another NodeId
-     * @param nodeId
+     * @param other
      * @return The distance of this NodeId from the given NodeId
      */
-    fun xor(nodeId: NodeId): NodeId {
+    fun xor(other: NodeId): NodeId {
         val result = ByteArray(KEY_SIZE_BYTES)
-        val nidBytes = nodeId.key
-        for (i in 0 until KEY_SIZE_BYTES)
-            result[i] = key[i] xor nidBytes[i]
+        for (i in 0 until KEY_SIZE_BYTES) {
+            result[i] = this.key[i] xor other.key[i]
+        }
         return NodeId(result)
     }
 
@@ -69,4 +72,10 @@ data class NodeId(var key: ByteArray) {
         const val KEY_SIZE_BYTES = 32
         const val KEY_SIZE_BITS = KEY_SIZE_BYTES * 8
     }
+
+    override fun toString(): String {
+        return toHex()
+    }
 }
+
+fun ByteArray.toHexString() = joinToString("") { String.format("%02x", it) }

@@ -7,7 +7,7 @@ import java.util.*
 import kotlin.experimental.xor
 
 
-data class NodeId(var key: ByteArray) {
+data class NodeId(var key: ByteArray) :Comparable<NodeId>{
     @Throws(IllegalArgumentException::class)
     constructor(key: String) : this(key.toByteArray())
 
@@ -68,14 +68,17 @@ data class NodeId(var key: ByteArray) {
 
     override fun hashCode() = Arrays.hashCode(key)
 
-    companion object {
-        const val KEY_SIZE_BYTES = 32
-        const val KEY_SIZE_BITS = KEY_SIZE_BYTES * 8
+    override fun compareTo(other: NodeId): Int {
+        val k1 = toInt()
+        val k2 = other.toInt()
+        return k1.abs().compareTo(k2.abs())
     }
 
-    override fun toString(): String {
-        return toHex()
+    companion object {
+        const val KEY_SIZE_BYTES = 32
     }
+
+    override fun toString() = toHex()
 }
 
 fun ByteArray.toHexString() = joinToString("") { String.format("%02x", it) }

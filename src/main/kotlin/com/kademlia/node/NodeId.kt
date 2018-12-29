@@ -2,12 +2,13 @@ package com.kademlia.node
 
 import com.google.common.hash.HashCode
 import com.google.common.hash.Hashing
+import com.kademlia.numberOfLeadingZeros
 import java.math.BigInteger
 import java.util.*
 import kotlin.experimental.xor
 
 
-data class NodeId(var key: ByteArray) :Comparable<NodeId>{
+data class NodeId(var key: ByteArray) : Comparable<NodeId> {
     @Throws(IllegalArgumentException::class)
     constructor(key: String) : this(key.toByteArray())
 
@@ -52,8 +53,11 @@ data class NodeId(var key: ByteArray) :Comparable<NodeId>{
         for (i in 0 until KEY_SIZE_BYTES) {
             result[i] = this.key[i] xor other.key[i]
         }
+
         return NodeId(result)
     }
+
+    fun numOfLeadingZeros() = this.key.numberOfLeadingZeros()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

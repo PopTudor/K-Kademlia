@@ -52,6 +52,8 @@ data class NodeId(var key: ByteArray) : Comparable<NodeId> {
 
     fun numOfLeadingZeros() = this.key.numberOfLeadingZeros()
 
+    fun distance(other: NodeId) = xor(other).numOfLeadingZeros()
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -73,6 +75,7 @@ data class NodeId(var key: ByteArray) : Comparable<NodeId> {
 
     companion object {
         const val KEY_SIZE_BYTES = 32
+        const val KEY_SIZE_LEN = KEY_SIZE_BYTES * 8
     }
 
     override fun toString() = toHex()

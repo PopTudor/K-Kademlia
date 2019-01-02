@@ -8,7 +8,7 @@ package com.kademlia.routing
  * @param contact represents N
  */
 class ContactComparator(contact: Contact) : Comparator<Contact> {
-    private var key = contact.nodeId.toInt()
+    private var key = contact.id.toInt()
 
     /**
      * Compare two objects of type <code>Node</code>
@@ -21,8 +21,8 @@ class ContactComparator(contact: Contact) : Comparator<Contact> {
     override fun compare(o1: Contact?, o2: Contact?): Int {
         o1 ?: return -1
         o2 ?: return -1
-        val k1 = o1.nodeId.toInt()
-        val k2 = o2.nodeId.toInt()
+        val k1 = o1.id.toInt()
+        val k2 = o2.id.toInt()
         val x1 = key.xor(k1).abs()
         val x2 = key.xor(k2).abs()
         return x1.compareTo(x2)

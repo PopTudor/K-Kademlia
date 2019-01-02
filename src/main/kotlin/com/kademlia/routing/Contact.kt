@@ -7,7 +7,7 @@ import java.net.InetAddress
  * A contact is stored in the routing table
  */
 data class Contact(
-        val nodeId: NodeId,
+        val id: NodeId,
         val ip: InetAddress = InetAddress.getLocalHost(),
         val port: Int = 8008
 )

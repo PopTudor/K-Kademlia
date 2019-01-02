@@ -21,4 +21,6 @@ data class Bucket(val bucketSize: Int = 20) {
     fun addToFront(other: Contact) {
         list.addFirst(other)
     }
+
+    fun copyContacts() = list.toMutableList()
 }

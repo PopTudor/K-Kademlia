@@ -21,4 +21,27 @@ data class RoutingTable(val currentNode: Contact) {
             bucket.addToFront(other)
         }
     }
+
+    fun findClosest(contact: Contact, count: Int): List<Contact> {
+        val prefLen = currentNode.id.distance(contact.id)
+        val bucket = buckets[prefLen]
+        val contacts = bucket.copyContacts()
+        for (i in buckets.indices) {
+            if (contacts.size >= count) {
+                break
+            }
+            val leftIndex = i - prefLen
+            val rightIndex = i + prefLen
+            if (leftIndex <= 0 || rightIndex > buckets.size) {
+                break
+            }
+            contacts.addAll(buckets[leftIndex].copyContacts())
+            contacts.addAll(buckets[rightIndex].copyContacts())
+        }
+        if (contacts.size > buckets.size)
+            (contacts.size downTo buckets.size).forEach {
+                contacts.removeAt(it)
+            }
+        return contacts
+    }
 }

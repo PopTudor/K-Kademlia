@@ -1,4 +1,6 @@
-package com.kademlia
+package com.kademlia.extensions
+
+import kotlin.experimental.xor
 
 /**
  * Returns the number of leading zeros in a bytes binary represenation
@@ -15,6 +17,7 @@ fun Byte.numberOfLeadingZeros() = when {
     this < 128 -> 1
     else -> 0
 }
+
 /**
  * Counts the number of leading zeros in a byte array.
  */
@@ -22,10 +25,20 @@ fun ByteArray.numberOfLeadingZeros(): Int {
     var result = 0
     var temp: Int
     for (i in indices) {
-        temp = this[i].numberOfLeadingZeros()
+        temp = this[i].numberOfLeadingZeros() // for this byte
         result += temp
         if (temp != 8)
             break
+    }
+    return result
+}
+
+fun ByteArray.xor(other: ByteArray): ByteArray {
+    if (this.size != other.size) throw IllegalArgumentException("Arrays have different lengths. They must be equal")
+
+    val result = ByteArray(this.size)
+    for (i in 0 until this.size) {
+        result[i] = this[i] xor other[i]
     }
     return result
 }

@@ -6,7 +6,7 @@ import com.kademlia.node.toHexString
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
-class NodeIdTest {
+class ContactIdTest {
 
     @Test
     fun emptyNodeId_notThrowsException() {

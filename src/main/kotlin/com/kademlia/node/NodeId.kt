@@ -2,10 +2,10 @@ package com.kademlia.node
 
 import com.google.common.hash.HashCode
 import com.google.common.hash.Hashing
-import com.kademlia.numberOfLeadingZeros
+import com.kademlia.extensions.numberOfLeadingZeros
+import com.kademlia.extensions.xor
 import java.math.BigInteger
 import java.util.*
-import kotlin.experimental.xor
 
 
 data class NodeId(var key: ByteArray) : Comparable<NodeId> {
@@ -48,14 +48,7 @@ data class NodeId(var key: ByteArray) : Comparable<NodeId> {
      * @param other
      * @return The distance of this NodeId from the given NodeId
      */
-    fun xor(other: NodeId): NodeId {
-        val result = ByteArray(KEY_SIZE_BYTES)
-        for (i in 0 until KEY_SIZE_BYTES) {
-            result[i] = this.key[i] xor other.key[i]
-        }
-
-        return NodeId(result)
-    }
+    fun xor(other: NodeId) = NodeId(this.key.xor(other.key))
 
     fun numOfLeadingZeros() = this.key.numberOfLeadingZeros()
 

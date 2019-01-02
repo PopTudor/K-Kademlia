@@ -1,8 +1,12 @@
-package com.kademlia.node
+package com.kademlia.routing
 
+import com.kademlia.node.NodeId
 import java.net.InetAddress
 
-data class Node(
+/**
+ * A contact is stored in the routing table
+ */
+data class Contact(
         val nodeId: NodeId,
         val ip: InetAddress = InetAddress.getLocalHost(),
         val port: Int = 8008

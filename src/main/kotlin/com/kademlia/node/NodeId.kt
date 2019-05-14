@@ -1,58 +1,62 @@
 package com.kademlia.node
 
-import com.google.common.hash.HashCode
-import com.google.common.hash.Hashing
 import com.kademlia.extensions.numberOfLeadingZeros
 import com.kademlia.extensions.xor
 import java.math.BigInteger
+import java.security.MessageDigest
 import java.util.*
 
 
-data class NodeId(var key: ByteArray) : Comparable<NodeId> {
-    @Throws(IllegalArgumentException::class)
-    constructor(key: String) : this(key.toByteArray())
+// More shared bit pre-fix means closer distance between node ids
+// This shared prefix will give leading zeros after the xor operation is done
+// 0 xor 0 = 0
+// 0 xor 1 = 1
+// 1 xor 0 = 1
+// 1 xor 1 = 0
+// ex: D(11,10)
+// 11: 1011
+// 10: 1010
+// xor---------
+//     0001 = 1 distance
+// we have 3 shared bits and distance is only 1! if we were to have less shared bits
+// the distance would have been greater
+// Notice that the longer the shared sequence of bits is, the more zeroes we have
+// in the resulting number
+class NodeId @Throws(IllegalArgumentException::class) constructor(key: String) : Comparable<NodeId> {
+    val id: ByteArray = ByteArray(KEY_SIZE_BYTES)
 
     init {
-        when {
-            key.isEmpty() -> {
-                key = ByteArray(KEY_SIZE_BYTES)
-                Random().nextBytes(key)
-                key = getHash(key).asBytes()
-            }
-            key.size != KEY_SIZE_BYTES -> {
-                val hash = getHash(key)
-                key = hash.asBytes()
-            }
-            else -> {
-            }
+        if (key.isEmpty()) { // init class with string. If string is empty, generate random sha
+            val randomBytes = ByteArray(KEY_SIZE_BYTES)
+            Random().nextBytes(randomBytes)
+            getHash(randomBytes).copyInto(this.id)
+        } else { // sha whatever we get and store it into id
+            getHash(key.toByteArray()).copyInto(this.id)
         }
-
-        if (key.size != KEY_SIZE_BYTES) { // should never reach
+        if (this.id.size != KEY_SIZE_BYTES) { //
             throw IllegalArgumentException("Key must have $KEY_SIZE_BYTES bytes or ${KEY_SIZE_BYTES * 8} bits")
         }
     }
 
-    private fun getHash(key: ByteArray): HashCode {
-        val hf = Hashing.sha256()
-        return hf.newHasher()
-                .putBytes(key)
-                .hash()
+    private fun getHash(key: ByteArray) = MessageDigest.getInstance("SHA-1").digest(key)
+
+    fun toInt() = BigInteger(id)
+
+    fun toHex() = id.toHexString()
+
+    fun printBinary(){
+        id.forEach {
+            print("${Integer.toBinaryString(it.toInt())} ")
+        }
     }
-
-    fun toInt() = BigInteger(key)
-
-    fun toHex() = key.toHexString()
-
     /**
-     * Checks the distance between this and another NodeId
+     * Calculate the distance between this and another NodeId
      * @param other
      * @return The distance of this NodeId from the given NodeId
      */
-    fun xor(other: NodeId) = NodeId(this.key.xor(other.key))
-
-    fun numOfLeadingZeros() = this.key.numberOfLeadingZeros()
-
-    fun distance(other: NodeId) = xor(other).numOfLeadingZeros()
+    fun distance(other: NodeId) = this.id
+            .xor(other.id)
+            .numberOfLeadingZeros()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -60,12 +64,12 @@ data class NodeId(var key: ByteArray) : Comparable<NodeId> {
 
         other as NodeId
 
-        if (!Arrays.equals(key, other.key)) return false
+        if (!Arrays.equals(id, other.id)) return false
 
         return true
     }
 
-    override fun hashCode() = Arrays.hashCode(key)
+    override fun hashCode() = Arrays.hashCode(id)
 
     override fun compareTo(other: NodeId): Int {
         val k1 = toInt()
@@ -73,12 +77,11 @@ data class NodeId(var key: ByteArray) : Comparable<NodeId> {
         return k1.abs().compareTo(k2.abs())
     }
 
-    companion object {
-        const val KEY_SIZE_BYTES = 32
-        const val KEY_SIZE_LEN = KEY_SIZE_BYTES * 8
-    }
 
     override fun toString() = toHex()
 }
+
+const val KEY_SIZE_BYTES = 20
+const val KEY_SIZE_LEN = KEY_SIZE_BYTES * 8
 
 fun ByteArray.toHexString() = joinToString("") { String.format("%02x", it) }

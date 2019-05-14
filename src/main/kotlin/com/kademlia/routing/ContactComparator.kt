@@ -15,8 +15,8 @@ class ContactComparator(contact: Contact) : Comparator<Contact> {
      * and determine which is closest to the node specified in the
      * constructor.
      *
-     * @param n1 Node 1 to compare distance from the key
-     * @param n2 Node 2 to compare distance from the key
+     * @param n1 Node 1 to compare distance from the id
+     * @param n2 Node 2 to compare distance from the id
      */
     override fun compare(o1: Contact?, o2: Contact?): Int {
         o1 ?: return -1

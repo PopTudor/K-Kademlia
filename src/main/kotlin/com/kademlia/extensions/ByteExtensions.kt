@@ -23,12 +23,11 @@ fun Byte.numberOfLeadingZeros() = when {
  */
 fun ByteArray.numberOfLeadingZeros(): Int {
     var result = 0
-    var temp: Int
-    for (i in indices) {
-        temp = this[i].numberOfLeadingZeros() // for this byte
+    forEach {
+        val temp = it.numberOfLeadingZeros()
         result += temp
-        if (temp != 8)
-            break
+        if (temp == 0) // further bytes have no leading zeroes
+            return@forEach
     }
     return result
 }

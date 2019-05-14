@@ -16,4 +16,8 @@ class ContactIdTest {
         assert(value2.numberOfLeadingZeros() == 6)
         assert(value3.numberOfLeadingZeros() == 6)
     }
+    @Test
+    fun testXorByteArray() {
+
+    }
 }

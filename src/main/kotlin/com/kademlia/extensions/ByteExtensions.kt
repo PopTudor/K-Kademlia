@@ -34,11 +34,6 @@ fun ByteArray.numberOfLeadingZeros(): Int {
 
 fun ByteArray.xor(other: ByteArray): ByteArray {
     if (this.size != other.size) throw IllegalArgumentException("Arrays have different lengths. They must be equal")
-
-    val result = ByteArray(this.size)
-    for (i in 0 until this.size) {
-        result[i] = this[i] xor other[i]
-    }
-    return result
+    return mapIndexed { index, byte ->  byte xor other[index] }.toByteArray()
 }
 

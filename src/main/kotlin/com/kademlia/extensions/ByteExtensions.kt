@@ -18,22 +18,24 @@ fun Byte.numberOfLeadingZeros() = when {
     else -> 0
 }
 
+fun Byte.toBinaryString(): String {
+    return String.format("%8s", Integer.toBinaryString(toInt() and 0xFF)).replace(' ', '0')
+}
+
 /**
  * Counts the number of leading zeros in a byte array.
  */
 fun ByteArray.numberOfLeadingZeros(): Int {
-    var result = 0
-    forEach {
-        val temp = it.numberOfLeadingZeros()
-        result += temp
-        if (temp == 0) // further bytes have no leading zeroes
-            return@forEach
-    }
-    return result
+    return map { it.numberOfLeadingZeros() }
+            .takeWhile { it != 0 } // if this byte does not have any bits starting with zero, stop counting and go to next step
+            .sum()
 }
 
-fun ByteArray.xor(other: ByteArray): ByteArray {
+infix fun ByteArray.xor(other: ByteArray): ByteArray {
     if (this.size != other.size) throw IllegalArgumentException("Arrays have different lengths. They must be equal")
-    return mapIndexed { index, byte ->  byte xor other[index] }.toByteArray()
+    return mapIndexed { index, byte -> byte xor other[index] }.toByteArray()
 }
 
+fun ByteArray.toBinaryString(separator: String = ""): String {
+    return joinToString(separator) { it.toBinaryString() }
+}

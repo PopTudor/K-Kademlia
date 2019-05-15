@@ -7,7 +7,9 @@ import java.net.InetAddress
  * A contact is stored in the routing table
  */
 data class Contact(
-        val id: NodeId=NodeId(""),
+        val id: NodeId = NodeId(),
         val ip: InetAddress = InetAddress.getLocalHost(),
-        val port: Int = 8008
-)
+        val port: Int = 58080
+) {
+    fun distance(otherContact: Contact) = id.distance(otherContact.id)
+}

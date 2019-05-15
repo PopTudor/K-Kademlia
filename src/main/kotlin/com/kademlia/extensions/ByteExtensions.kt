@@ -22,6 +22,10 @@ fun Byte.toBinaryString(): String {
     return String.format("%8s", Integer.toBinaryString(toInt() and 0xFF)).replace(' ', '0')
 }
 
+fun Int.toBinaryString():String{
+    return String.format("%8s", Integer.toBinaryString(toInt() and 0xFF)).replace(' ', '0')
+}
+
 /**
  * Counts the number of leading zeros in a byte array.
  */

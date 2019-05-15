@@ -56,4 +56,12 @@ data class Node(
         }
     }
 
+    fun findNode(node: Node): Boolean {
+        val rtn = routingTable.findNode(node.id)
+        if (rtn == null) {
+            return false
+        }
+        return true
+    }
+
 }

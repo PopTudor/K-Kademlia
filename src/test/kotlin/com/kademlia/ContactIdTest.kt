@@ -17,9 +17,9 @@ class ContactIdTest {
         val n3 = NodeId()
         println(n1)
         println(n2)
-        println(n1.distance(n2).toBinaryString())
-        println(n1.distance(n2))
-        println(n1.distance(n1))
+        println(n1.distanceTo(n2).toBinaryString())
+        println(n1.distanceTo(n2))
+        println(n1.distanceTo(n1))
         val routingTable = RoutingTable(n1)
         routingTable.add(n1)
         routingTable.add(n2)
@@ -36,6 +36,23 @@ class ContactIdTest {
         }
         val n = Node()
         n.ping(n1)
+    }
+
+    @Test
+    fun testNotFindNodeLocalRoutingTable() {
+        val n1 = Node()
+        val n = Node()
+        val found = n1.findNode(n)
+        assert(!found)
+    }
+
+    @Test
+    fun testFindNodeLocalRoutingTable() {
+        val n1 = Node()
+        val n = Node()
+        n1.routingTable.add(n.id)
+        val found = n1.findNode(n)
+        assert(found)
     }
 
 }

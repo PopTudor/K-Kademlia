@@ -13,11 +13,16 @@ data class RoutingTable(
         for (i in 1..KEY_SIZE_LEN) buckets.add(Bucket())
     }
     fun add(contact: NodeId) {
-        val prefixLenIndex = currentNode.distance(contact)
+        val prefixLenIndex = currentNode.distanceTo(contact)
         if (prefixLenIndex == KEY_SIZE_LEN) {
             buckets[prefixLenIndex - 1].add(contact)
             return
         }
         buckets[prefixLenIndex].add(contact)
+    }
+
+    fun findNode(node: NodeId): NodeId? {
+        val distance = currentNode.distanceTo(node)
+        return buckets[distance].find(node)
     }
 }

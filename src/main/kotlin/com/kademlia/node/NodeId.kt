@@ -60,7 +60,7 @@ constructor(
      * @param other
      * @return The distance of this NodeId from the given NodeId
      */
-    fun distance(other: NodeId) = this.id
+    fun distanceTo(other: NodeId) = this.id
             .xor(other.id)
             .numberOfLeadingZeros()
 

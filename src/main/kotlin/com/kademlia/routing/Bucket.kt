@@ -22,9 +22,13 @@ data class Bucket(
         if (list.contains(other)) {
             list.remove(other)
         }
-        if (list.size == NO_OF_CONTACTS)
+        if (list.size == bucketSize)
             list.removeLast()
         list.addFirst(other)
+    }
+
+    fun find(nodeId: NodeId):NodeId?{
+        return list.firstOrNull { it.id.contentEquals(nodeId.id) }
     }
 
     fun copyContacts() = list.toMutableList()

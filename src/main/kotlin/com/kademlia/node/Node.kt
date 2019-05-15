@@ -65,8 +65,14 @@ data class Node(
             println("Empty routing table")
             return false
         }
-        closestBucket.nodes.forEach {
-            Socket(it.ip, it.port).use {
+        closestBucket.nodes.forEach { neighbour ->
+            Socket(neighbour.ip, neighbour.port).use {
+                val out = DataOutputStream(it.getOutputStream())
+                val msg = Message(Type.FIND_NODE, id, neighbour)
+                val json = gson.toJson(msg)
+                out.writeUTF(json)
+
+                // todo handle the response with valid node if found, empty/null list if can't go further with this request or if we have another list that we have to query
 
             }
         }

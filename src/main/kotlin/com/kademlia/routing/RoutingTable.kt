@@ -34,7 +34,9 @@ data class RoutingTable(
      * If nothing is found, we got an empty routing table so just return an empty bucket
      */
     fun findClosestBucket(node: NodeId): Bucket {
-        val distanceTo = currentNode.distanceTo(node)
+        var distanceTo = currentNode.distanceTo(node)
+        if (distanceTo == KEY_SIZE_LEN) distanceTo--
+
         var closestBuckets = buckets[distanceTo]
 
         //if the bucket at the distance we are interested in has some contacts, return here else go further

@@ -58,10 +58,19 @@ data class Node(
 
     fun findNode(node: Node): Boolean {
         val rtn = routingTable.findNode(node.id)
-        if (rtn == null) {
+        if (rtn != null) return true
+
+        val closestBucket = routingTable.findClosestBucket(node.id)
+        if (closestBucket.isEmpty()) {
+            println("Empty routing table")
             return false
         }
-        return true
+        closestBucket.nodes.forEach {
+            Socket(it.ip, it.port).use {
+
+            }
+        }
+        return false
     }
 
 }

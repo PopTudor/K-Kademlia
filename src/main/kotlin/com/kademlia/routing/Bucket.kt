@@ -11,25 +11,27 @@ const val NO_OF_CONTACTS = 20
  */
 data class Bucket(
         val bucketSize: Int = NO_OF_CONTACTS,
-        private val list: LinkedList<NodeId> = LinkedList()
+        val nodes: LinkedList<NodeId> = LinkedList()
 ) {
 
-    fun contains(contact: NodeId) = list.contains(contact)
+    fun contains(contact: NodeId) = nodes.contains(contact)
 
-    fun isFull() = list.size == bucketSize
+    fun isFull() = nodes.size == bucketSize
 
     fun add(other: NodeId) {
-        if (list.contains(other)) {
-            list.remove(other)
+        if (nodes.contains(other)) {
+            nodes.remove(other)
         }
-        if (list.size == bucketSize)
-            list.removeLast()
-        list.addFirst(other)
+        if (nodes.size == bucketSize)
+            nodes.removeLast()
+        nodes.addFirst(other)
     }
 
-    fun find(nodeId: NodeId):NodeId?{
-        return list.firstOrNull { it.id.contentEquals(nodeId.id) }
+    fun find(nodeId: NodeId): NodeId? {
+        return nodes.firstOrNull { it.id.contentEquals(nodeId.id) }
     }
 
-    fun copyContacts() = list.toMutableList()
+    fun copyContacts() = nodes.toMutableList()
+    fun isEmpty() = nodes.isEmpty()
+
 }

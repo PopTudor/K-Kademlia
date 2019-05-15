@@ -4,6 +4,7 @@ import com.kademlia.extensions.numberOfLeadingZeros
 import com.kademlia.extensions.toBinaryString
 import com.kademlia.extensions.xor
 import java.math.BigInteger
+import java.net.InetAddress
 import java.security.MessageDigest
 import java.util.*
 
@@ -23,7 +24,12 @@ import java.util.*
 // the distance would have been greater
 // Notice that the longer the shared sequence of bits is, the more zeroes we have
 // in the resulting number
-class NodeId @Throws(IllegalArgumentException::class) constructor(key: String="") : Comparable<NodeId> {
+class NodeId @Throws(IllegalArgumentException::class)
+constructor(
+        key: String = "",
+        val ip: InetAddress = InetAddress.getLocalHost(),
+        val port: Int = 58080
+) : Comparable<NodeId> {
     val id: ByteArray = ByteArray(KEY_SIZE_BYTES)
 
     init {
@@ -45,9 +51,10 @@ class NodeId @Throws(IllegalArgumentException::class) constructor(key: String=""
 
     fun toHex() = id.toHexString()
 
-    fun printBinary(){
+    fun printBinary() {
         println(id.toBinaryString(" "))
     }
+
     /**
      * Calculate the distance between this and another NodeId
      * @param other

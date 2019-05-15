@@ -1,5 +1,9 @@
 package com.kademlia
 
-fun main(args: Array<String>) {
-    println("hello")
+import com.kademlia.node.Node
+
+fun main() {
+    val n = Node()
+    println(n)
+    n.start()
 }

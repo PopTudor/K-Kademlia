@@ -1,5 +1,6 @@
 package com.kademlia.routing
 
+import com.kademlia.node.NodeId
 import java.util.*
 
 const val NO_OF_CONTACTS = 20
@@ -10,14 +11,14 @@ const val NO_OF_CONTACTS = 20
  */
 data class Bucket(
         val bucketSize: Int = NO_OF_CONTACTS,
-        private val list: LinkedList<Contact> = LinkedList()
+        private val list: LinkedList<NodeId> = LinkedList()
 ) {
 
-    fun contains(contact: Contact) = list.contains(contact)
+    fun contains(contact: NodeId) = list.contains(contact)
 
     fun isFull() = list.size == bucketSize
 
-    fun add(other: Contact) {
+    fun add(other: NodeId) {
         if (list.contains(other)) {
             list.remove(other)
         }
